@@ -92,6 +92,12 @@
     border-right: 1px solid var(--line);
   }
 
+  .sidebar-head { display: flex; flex-direction: column; gap: 2rem; }
+  .sidebar-panel { display: flex; flex-direction: column; gap: 2rem; flex: 1; }
+
+  .head-row { display: flex; flex-direction: column-reverse; align-items: flex-start; gap: 1.25rem; }
+  .head-controls { display: flex; align-items: center; gap: 0.6rem; }
+
   .lang-switch { display: flex; gap: 0.4rem; }
   .lang-btn {
     font-family: var(--mono);
@@ -105,6 +111,23 @@
   }
   .lang-btn[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
   .lang-btn:hover { color: var(--accent); }
+
+  .menu-toggle {
+    display: none;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 0.4rem 0.7rem;
+    cursor: pointer;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .menu-toggle:hover { color: var(--accent); border-color: var(--accent); }
+  .menu-toggle .chevron { transition: transform 0.15s ease; }
+  .sidebar[data-menu="open"] .menu-toggle .chevron { transform: rotate(180deg); }
 
   .mark {
     width: 46px;
@@ -282,18 +305,33 @@
       height: auto;
       border-right: none;
       border-bottom: 1px solid var(--line);
-      padding: 2rem 1.25rem;
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1.25rem;
+      padding: 1.25rem;
+      gap: 0;
     }
-    .lang-switch { order: -1; flex-basis: 100%; justify-content: flex-end; }
-    .identity { flex: 1 1 auto; }
-    nav.sidenav { flex-direction: row; flex-wrap: wrap; gap: 0 1rem; }
-    .status { display: none; }
-    .sidebar-footer { flex-direction: row; flex-wrap: wrap; gap: 1.25rem; margin-top: 0; }
+
+    .sidebar-head { gap: 0; }
+    .head-row { flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: nowrap; gap: 1rem; }
+    .identity { display: flex; align-items: center; gap: 0.85rem; flex: 1 1 auto; min-width: 0; }
+    .mark { flex-shrink: 0; }
+    .identity h1 { font-size: 1.05rem; margin-top: 0; }
+    .identity .role { display: none; }
+
+    .head-controls { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
+    .menu-toggle { display: inline-flex; }
+
+    .sidebar-panel {
+      display: none;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--line);
+    }
+    .sidebar[data-menu="open"] .sidebar-panel { display: flex; }
+
+    .status { display: block; }
+    nav.sidenav { flex-direction: column; gap: 0.15rem; }
+    .sidebar-footer { flex-direction: column; align-items: flex-start; gap: 0.75rem; margin-top: 0; }
+
     main { padding: 2.5rem 1.25rem 4rem; }
     .facts, .grid-2 { grid-template-columns: 1fr; }
     .entry { grid-template-columns: 1fr; gap: 0.3rem; }
@@ -301,45 +339,56 @@
 </style>
 
 <div class="shell" data-lang="no">
-  <aside class="sidebar">
-    <div class="lang-switch" role="group" aria-label="Language / Språk">
-      <button type="button" class="lang-btn" data-set-lang="no">NO</button>
-      <button type="button" class="lang-btn" data-set-lang="en">EN</button>
-    </div>
-
-    <div class="identity">
-      <div class="mark">EGEN</div>
-      <h1>Eric Gabo<br>Ekeberg&nbsp;Nilsen</h1>
-      <div class="role">
-        <span class="t-en">Political Scientist · Data Analyst</span>
-        <span class="t-no">Statsviter · Dataanalytiker</span>
+  <aside class="sidebar" id="sidebar" data-menu="closed">
+    <div class="sidebar-head">
+      <div class="head-row">
+        <div class="identity">
+          <div class="mark">EGEN</div>
+          <h1>Eric Gabo<br>Ekeberg&nbsp;Nilsen</h1>
+          <div class="role">
+            <span class="t-en">Political Scientist · Data Analyst</span>
+            <span class="t-no">Statsviter · Dataanalytiker</span>
+          </div>
+        </div>
+        <div class="head-controls">
+          <div class="lang-switch" role="group" aria-label="Language / Språk">
+            <button type="button" class="lang-btn" data-set-lang="no">NO</button>
+            <button type="button" class="lang-btn" data-set-lang="en">EN</button>
+          </div>
+          <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="sidebar-panel">
+            <span class="t-en">Menu</span><span class="t-no">Meny</span>
+            <span class="chevron" aria-hidden="true">⌄</span>
+          </button>
+        </div>
       </div>
     </div>
 
-    <div class="status">
-      <span class="t-en">PhD in Political Science, University of Oslo — awarded 2026</span>
-      <span class="t-no">PhD i statsvitenskap, Universitetet i Oslo — avlagt 2026</span>
-    </div>
-
-    <nav class="sidenav">
-      <a href="#about"><span class="t-en">About</span><span class="t-no">Om</span></a>
-      <a href="#research"><span class="t-en">Research</span><span class="t-no">Forskning</span></a>
-      <a href="#teaching"><span class="t-en">Teaching</span><span class="t-no">Undervisning</span></a>
-      <a href="#data"><span class="t-en">Data &amp; Analytics</span><span class="t-no">Data &amp; analyse</span></a>
-      <a href="#contact"><span class="t-en">Contact</span><span class="t-no">Kontakt</span></a>
-    </nav>
-
-    <div class="sidebar-footer">
-      <a href="mailto:egen97@gmail.com">egen97@gmail.com</a>
-      <div class="loc">
-        <span class="t-en">Oslo, Norway</span>
-        <span class="t-no">Oslo, Norge</span>
+    <div class="sidebar-panel" id="sidebar-panel">
+      <div class="status">
+        <span class="t-en">PhD in Political Science, University of Oslo — awarded 2026</span>
+        <span class="t-no">PhD i statsvitenskap, Universitetet i Oslo — avlagt 2026</span>
       </div>
-      <div class="elsewhere">
-        <a href="https://scholar.google.com/citations?hl=no&user=xnSKHn0AAAAJ" target="_blank" rel="noopener">Google Scholar</a>
-        <a href="https://orcid.org/0009-0009-4984-6393" target="_blank" rel="noopener">ORCID</a>
-        <a href="https://www.linkedin.com/in/eric-g-e-nilsen" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/egen97" target="_blank" rel="noopener">GitHub</a>
+
+      <nav class="sidenav">
+        <a href="#about"><span class="t-en">About</span><span class="t-no">Om</span></a>
+        <a href="#research"><span class="t-en">Research</span><span class="t-no">Forskning</span></a>
+        <a href="#teaching"><span class="t-en">Teaching</span><span class="t-no">Undervisning</span></a>
+        <a href="#data"><span class="t-en">Data &amp; Analytics</span><span class="t-no">Data &amp; analyse</span></a>
+        <a href="#contact"><span class="t-en">Contact</span><span class="t-no">Kontakt</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="mailto:egen97@gmail.com">egen97@gmail.com</a>
+        <div class="loc">
+          <span class="t-en">Oslo, Norway</span>
+          <span class="t-no">Oslo, Norge</span>
+        </div>
+        <div class="elsewhere">
+          <a href="https://scholar.google.com/citations?hl=no&user=xnSKHn0AAAAJ" target="_blank" rel="noopener">Google Scholar</a>
+          <a href="https://orcid.org/0009-0009-4984-6393" target="_blank" rel="noopener">ORCID</a>
+          <a href="https://www.linkedin.com/in/eric-g-e-nilsen" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/egen97" target="_blank" rel="noopener">GitHub</a>
+        </div>
       </div>
     </div>
   </aside>
@@ -834,5 +883,23 @@
     var saved = null;
     try { saved = localStorage.getItem('site-lang'); } catch (e) {}
     setLang(saved === 'en' ? 'en' : 'no');
+  })();
+
+  (function () {
+    var sidebar = document.getElementById('sidebar');
+    var menuBtn = document.querySelector('.menu-toggle');
+
+    function setMenu(open) {
+      sidebar.setAttribute('data-menu', open ? 'open' : 'closed');
+      menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    menuBtn.addEventListener('click', function () {
+      setMenu(sidebar.getAttribute('data-menu') !== 'open');
+    });
+
+    document.querySelectorAll('.sidenav a').forEach(function (a) {
+      a.addEventListener('click', function () { setMenu(false); });
+    });
   })();
 </script>
