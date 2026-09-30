@@ -2,341 +2,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-<style>
-  :root {
-    --ink: #16222a;
-    --paper: #eff1ea;
-    --paper-raised: #e3e6db;
-    --accent: #a03e2c;
-    --accent-soft: #c97a64;
-    --olive: #5f6b49;
-    --line: #c6cdba;
-    --muted: #52604f;
-    --muted-2: #6d7a6a;
-
-    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
-    --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-    --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --ink: #e9ebe2;
-      --paper: #12181c;
-      --paper-raised: #1a2226;
-      --accent: #d9836a;
-      --accent-soft: #a03e2c;
-      --olive: #9aa87c;
-      --line: #2c3630;
-      --muted: #a9b3a0;
-      --muted-2: #85917f;
-    }
-  }
-
-  :root[data-theme="dark"] {
-    --ink: #e9ebe2;
-    --paper: #12181c;
-    --paper-raised: #1a2226;
-    --accent: #d9836a;
-    --accent-soft: #a03e2c;
-    --olive: #9aa87c;
-    --line: #2c3630;
-    --muted: #a9b3a0;
-    --muted-2: #85917f;
-  }
-
-  * { box-sizing: border-box; }
-  @media (prefers-reduced-motion: reduce) {
-    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-  }
-
-  body {
-    background: var(--paper);
-    color: var(--ink);
-    font-family: var(--sans);
-    font-size: 16px;
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
-  a:hover { color: var(--accent-soft); }
-  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-  h1, h2, h3 { font-family: var(--serif); font-weight: 600; text-wrap: balance; margin: 0; color: var(--ink); }
-
-  .shell {
-    max-width: 1180px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 300px minmax(0, 1fr);
-    gap: 0;
-    min-height: 100vh;
-  }
-
-  /* language toggling: hide the block not matching shell[data-lang] */
-  .shell[data-lang="no"] .t-en { display: none; }
-  .shell[data-lang="en"] .t-no { display: none; }
-
-  /* ---------- Sidebar ---------- */
-  .sidebar {
-    position: sticky;
-    top: 0;
-    align-self: start;
-    height: 100vh;
-    padding: 3rem 2rem 2rem 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    border-right: 1px solid var(--line);
-  }
-
-  .sidebar-head { display: flex; flex-direction: column; gap: 2rem; }
-  .sidebar-panel { display: flex; flex-direction: column; gap: 2rem; flex: 1; }
-
-  .head-row { display: flex; flex-direction: column-reverse; align-items: flex-start; gap: 1.25rem; }
-  .head-controls { display: flex; align-items: center; gap: 0.6rem; }
-
-  .lang-switch { display: flex; gap: 0.4rem; }
-  .lang-btn {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.05em;
-    background: none;
-    border: 1px solid var(--line);
-    color: var(--muted-2);
-    padding: 0.3rem 0.55rem;
-    cursor: pointer;
-  }
-  .lang-btn[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
-  .lang-btn:hover { color: var(--accent); }
-
-  .menu-toggle {
-    display: none;
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.05em;
-    background: none;
-    border: 1px solid var(--line);
-    color: var(--ink);
-    padding: 0.4rem 0.7rem;
-    cursor: pointer;
-    align-items: center;
-    gap: 0.4rem;
-  }
-  .menu-toggle:hover { color: var(--accent); border-color: var(--accent); }
-  .menu-toggle .chevron { transition: transform 0.15s ease; }
-  .sidebar[data-menu="open"] .menu-toggle .chevron { transform: rotate(180deg); }
-
-  .mark {
-    width: 46px;
-    height: 46px;
-    border: 1.5px solid var(--ink);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--mono);
-    font-size: 0.85rem;
-    letter-spacing: 0.02em;
-  }
-
-  .identity h1 {
-    font-size: 1.5rem;
-    line-height: 1.2;
-    margin-top: 1rem;
-  }
-
-  .identity .role {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--muted-2);
-    margin-top: 0.5rem;
-  }
-
-  .status {
-    font-size: 0.85rem;
-    color: var(--muted);
-    border-left: 2px solid var(--accent);
-    padding-left: 0.7rem;
-    line-height: 1.45;
-  }
-
-  nav.sidenav { display: flex; flex-direction: column; gap: 0.15rem; font-family: var(--mono); font-size: 0.85rem; }
-  nav.sidenav a {
-    color: var(--ink);
-    text-decoration: none;
-    padding: 0.4rem 0;
-    border-bottom: 1px solid transparent;
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-  }
-  nav.sidenav a:hover { color: var(--accent); }
-  nav.sidenav a::before { content: "·"; color: var(--olive); font-size: 1.1rem; }
-
-  .sidebar-footer { margin-top: auto; display: flex; flex-direction: column; gap: 0.4rem; }
-  .sidebar-footer a { font-size: 0.85rem; }
-  .sidebar-footer .loc { font-family: var(--mono); font-size: 0.72rem; color: var(--muted-2); letter-spacing: 0.03em; margin-bottom: 0.3rem; }
-  .elsewhere { display: flex; flex-direction: column; gap: 0.35rem; }
-  .elsewhere a {
-    font-family: var(--mono);
-    font-size: 0.76rem;
-    color: var(--muted);
-    text-decoration: none;
-    letter-spacing: 0.02em;
-  }
-  .elsewhere a:hover { color: var(--accent); }
-  .elsewhere a::before { content: "→ "; color: var(--olive); }
-
-  /* ---------- Main ---------- */
-  main { padding: 3rem 0 5rem 3rem; }
-
-  section { max-width: 640px; padding-bottom: 4rem; }
-  section + section { border-top: 1px solid var(--line); padding-top: 3.5rem; }
-
-  .eyebrow {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: var(--olive);
-    margin-bottom: 1rem;
-  }
-  .eyebrow .tick { width: 12px; height: 3px; background: var(--accent); display: inline-block; }
-
-  section h2 { font-size: 1.9rem; margin-bottom: 1.1rem; }
-
-  p { margin: 0 0 1rem; max-width: 60ch; color: var(--ink); }
-  p.lede { font-size: 1.05rem; color: var(--muted); }
-  .t-en > p:last-of-type, .t-no > p:last-of-type { margin-bottom: 0; }
-
-  .facts {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    background: var(--line);
-    border: 1px solid var(--line);
-    margin: 1.75rem 0 0;
-  }
-  .fact { background: var(--paper); padding: 0.9rem 1rem; }
-  .fact .n { font-family: var(--mono); font-size: 0.72rem; color: var(--muted-2); letter-spacing: 0.04em; text-transform: uppercase; }
-  .fact .v { font-family: var(--serif); font-size: 1rem; margin-top: 0.25rem; }
-
-  /* ---------- Entry lists (pubs, papers, talks) ---------- */
-  .entries { display: flex; flex-direction: column; margin-top: 0.5rem; }
-  .entry {
-    display: grid;
-    grid-template-columns: 62px 1fr;
-    gap: 1.1rem;
-    padding: 1.1rem 0;
-    border-top: 1px solid var(--line);
-  }
-  .entries .entry:first-child { border-top: none; }
-  .entry .when { font-family: var(--mono); font-size: 0.78rem; color: var(--muted-2); padding-top: 0.15rem; }
-  .entry .title { font-family: var(--serif); font-size: 1.05rem; font-weight: 600; line-height: 1.35; }
-  .entry .title a { color: var(--ink); text-decoration-thickness: 1px; }
-  .entry .title a:hover { color: var(--accent); }
-  .entry .meta { font-size: 0.88rem; color: var(--muted); margin-top: 0.3rem; }
-  .entry .venue { color: var(--accent); font-family: var(--mono); font-size: 0.76rem; letter-spacing: 0.02em; }
-
-  h3.subhead {
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--muted-2);
-    margin: 2.25rem 0 0.25rem;
-  }
-  h3.subhead:first-of-type { margin-top: 1.75rem; }
-
-  .note { font-size: 0.85rem; color: var(--muted-2); margin-top: 1rem; font-style: italic; }
-
-  /* ---------- Teaching lists ---------- */
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 0.5rem; }
-  ul.plain { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
-  ul.plain li { font-size: 0.92rem; line-height: 1.4; padding-left: 1rem; border-left: 2px solid var(--line); }
-  ul.plain .tag { display: block; font-family: var(--mono); font-size: 0.72rem; color: var(--olive); letter-spacing: 0.03em; margin-top: 0.15rem; }
-
-  /* ---------- Tools / skills ---------- */
-  .tools { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
-  .tool {
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    border: 1px solid var(--line);
-    padding: 0.35rem 0.65rem;
-    color: var(--muted);
-  }
-  .tool.primary { border-color: var(--accent); color: var(--accent); }
-
-  /* ---------- Contact ---------- */
-  .contact-row { display: flex; flex-direction: column; gap: 0.9rem; margin-top: 1.5rem; }
-  .contact-row a { font-family: var(--serif); font-size: 1.2rem; }
-  .contact-row .sub { font-family: var(--mono); font-size: 0.75rem; color: var(--muted-2); }
-  .contact-links { display: flex; flex-wrap: wrap; gap: 1.25rem; margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--line); }
-  .contact-links a {
-    font-family: var(--mono);
-    font-size: 0.82rem;
-    color: var(--muted);
-    text-decoration: none;
-  }
-  .contact-links a:hover { color: var(--accent); }
-  .contact-links a::before { content: "→ "; color: var(--olive); }
-
-  footer.page-end {
-    max-width: 640px;
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--muted-2);
-    padding: 2rem 0 3rem;
-    letter-spacing: 0.02em;
-  }
-
-  /* ---------- Responsive ---------- */
-  @media (max-width: 860px) {
-    .shell { grid-template-columns: 1fr; }
-    .sidebar {
-      position: relative;
-      height: auto;
-      border-right: none;
-      border-bottom: 1px solid var(--line);
-      padding: 1.25rem;
-      gap: 0;
-    }
-
-    .sidebar-head { gap: 0; }
-    .head-row { flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: nowrap; gap: 1rem; }
-    .identity { display: flex; align-items: center; gap: 0.85rem; flex: 1 1 auto; min-width: 0; }
-    .mark { flex-shrink: 0; }
-    .identity h1 { font-size: 1.05rem; margin-top: 0; }
-    .identity .role { display: none; }
-
-    .head-controls { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
-    .menu-toggle { display: inline-flex; }
-
-    .sidebar-panel {
-      display: none;
-      gap: 1.25rem;
-      margin-top: 1.25rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--line);
-    }
-    .sidebar[data-menu="open"] .sidebar-panel { display: flex; }
-
-    .status { display: block; }
-    nav.sidenav { flex-direction: column; gap: 0.15rem; }
-    .sidebar-footer { flex-direction: column; align-items: flex-start; gap: 0.75rem; margin-top: 0; }
-
-    main { padding: 2.5rem 1.25rem 4rem; }
-    .facts, .grid-2 { grid-template-columns: 1fr; }
-    .entry { grid-template-columns: 1fr; gap: 0.3rem; }
-  }
-</style>
+<link rel="stylesheet" href="assets/styles.css">
 
 <div class="shell" data-lang="no">
   <aside class="sidebar" id="sidebar" data-menu="closed">
@@ -434,121 +100,13 @@
         <p>Studied through causal inference, survey experiments, and quantitative text analysis — largely in collaboration with colleagues at the University of Oslo and Aarhus University.</p>
 
         <h3 class="subhead">Publications</h3>
-        <div class="entries">
-          <div class="entry">
-            <div class="when">2024<br><span class="venue">JPR</span></div>
-            <div>
-              <div class="title"><a href="https://doi.org/10.1093/jopres/xjag055" target="_blank" rel="noopener">In Times of Peril: How Liberals Embrace National Defence</a></div>
-              <div class="meta">Journal of Peace Research · Published</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">2024<br><span class="venue">IO</span></div>
-            <div>
-              <div class="title"><a href="https://doi.org/10.1017/S0020818326101313" target="_blank" rel="noopener">Anticipating the Cost of Withdrawal: How Hegemonic Withdrawal from NATO Affects European Willingness to Spend and Defend</a></div>
-              <div class="meta">with Hannah Jakob Barret · International Organization · Published</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">2026</div>
-            <div>
-              <div class="title">From Principles to Battle Lines: How Information From and About External Actors Affects Attitudes to War</div>
-              <div class="meta">PhD dissertation, University of Oslo</div>
-            </div>
-          </div>
-        </div>
+        <div class="entries" id="pub-list-en"></div>
 
         <h3 class="subhead">Working papers</h3>
-        <div class="entries">
-          <div class="entry">
-            <div class="when">WP</div>
-            <div>
-              <div class="title">Autocrats and the Academy: Does Dictatorship Depress Scientific Production?</div>
-              <div class="meta">with Tore Wig, Haakon Gjerløv &amp; Sirianne Dahlum</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">WP</div>
-            <div>
-              <div class="title">How War Shapes Science: Evidence from 60 Million Publications</div>
-              <div class="meta">with Tore Wig &amp; Haakon Gjerløv</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">WP</div>
-            <div>
-              <div class="title">Moral Norms and Interstate War</div>
-              <div class="meta">with Tore Wig &amp; Daniel Goldstein</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">WP</div>
-            <div>
-              <div class="title">When the Target Becomes the Message: Creating War Support Through Targeted Messages</div>
-              <div class="meta">Sole author</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">WP</div>
-            <div>
-              <div class="title">Cabinet Composition and Interstate War</div>
-              <div class="meta">with Jonas Willibald Schmid, Jacob Nyrup &amp; Tore Wig</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">WP</div>
-            <div>
-              <div class="title">Sensitivity Analysis of Determinants of Conflict Onset</div>
-              <div class="meta">with Sverke R. Saxegaard</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">WP</div>
-            <div>
-              <div class="title">Make War Not Love? Military Performance and Domestic Support for Dictators at War</div>
-              <div class="meta">with Solveig Bjørkholt, Jonas Willibald Schmid &amp; Amalie Nilsen</div>
-            </div>
-          </div>
-        </div>
+        <div class="entries" id="wp-list-en"></div>
 
         <h3 class="subhead">Selected talks &amp; conferences</h3>
-        <div class="entries">
-          <div class="entry">
-            <div class="when">Nov 2024</div>
-            <div>
-              <div class="title">Sensitivity Analysis of Determinants of Conflict Onset</div>
-              <div class="meta">Invited talk — PaCE: Patterns of Conflict Emergence</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">Jul 2024</div>
-            <div>
-              <div class="title">When the Target Becomes the Message</div>
-              <div class="meta">European Political Science Association Annual Conference, Cologne</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">Jul 2024</div>
-            <div>
-              <div class="title">When the Target Becomes the Message</div>
-              <div class="meta">The Jan Tinbergen European Peace Science Conference, Dublin</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">Jul 2023</div>
-            <div>
-              <div class="title">Cabinet Composition and Interstate War</div>
-              <div class="meta">European Political Science Association Annual Conference, Glasgow</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">Nov 2025</div>
-            <div>
-              <div class="title">Moral Norms and Interstate War</div>
-              <div class="meta">Dansk Selskab for Statskunskab, Nyborg</div>
-            </div>
-          </div>
-        </div>
+        <div class="entries" id="talks-list-en"></div>
         <p class="note">13 conference and workshop presentations since 2022 — full list available on request.</p>
       </div>
 
@@ -558,121 +116,13 @@
         <p>Studert gjennom kausal inferens, spørreundersøkelseseksperimenter og kvantitativ tekstanalyse – hovedsakelig i samarbeid med kolleger ved Universitetet i Oslo og Aarhus Universitet.</p>
 
         <h3 class="subhead">Publikasjoner</h3>
-        <div class="entries">
-          <div class="entry">
-            <div class="when">2024<br><span class="venue">JPR</span></div>
-            <div>
-              <div class="title"><a href="https://doi.org/10.1093/jopres/xjag055" target="_blank" rel="noopener">In Times of Peril: How Liberals Embrace National Defence</a></div>
-              <div class="meta">Journal of Peace Research · Publisert</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">2024<br><span class="venue">IO</span></div>
-            <div>
-              <div class="title"><a href="https://doi.org/10.1017/S0020818326101313" target="_blank" rel="noopener">Anticipating the Cost of Withdrawal: How Hegemonic Withdrawal from NATO Affects European Willingness to Spend and Defend</a></div>
-              <div class="meta">med Hannah Jakob Barret · International Organization · Publisert</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">2026</div>
-            <div>
-              <div class="title">From Principles to Battle Lines: How Information From and About External Actors Affects Attitudes to War</div>
-              <div class="meta">Doktorgradsavhandling, Universitetet i Oslo</div>
-            </div>
-          </div>
-        </div>
+        <div class="entries" id="pub-list-no"></div>
 
         <h3 class="subhead">Arbeidsnotater</h3>
-        <div class="entries">
-          <div class="entry">
-            <div class="when">WP</div>
-            <div>
-              <div class="title">Autocrats and the Academy: Does Dictatorship Depress Scientific Production?</div>
-              <div class="meta">med Tore Wig, Haakon Gjerløv &amp; Sirianne Dahlum</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">WP</div>
-            <div>
-              <div class="title">How War Shapes Science: Evidence from 60 Million Publications</div>
-              <div class="meta">med Tore Wig &amp; Haakon Gjerløv</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">WP</div>
-            <div>
-              <div class="title">Moral Norms and Interstate War</div>
-              <div class="meta">med Tore Wig &amp; Daniel Goldstein</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">WP</div>
-            <div>
-              <div class="title">When the Target Becomes the Message: Creating War Support Through Targeted Messages</div>
-              <div class="meta">Eneforfatter</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">WP</div>
-            <div>
-              <div class="title">Cabinet Composition and Interstate War</div>
-              <div class="meta">med Jonas Willibald Schmid, Jacob Nyrup &amp; Tore Wig</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">WP</div>
-            <div>
-              <div class="title">Sensitivity Analysis of Determinants of Conflict Onset</div>
-              <div class="meta">med Sverke R. Saxegaard</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">WP</div>
-            <div>
-              <div class="title">Make War Not Love? Military Performance and Domestic Support for Dictators at War</div>
-              <div class="meta">med Solveig Bjørkholt, Jonas Willibald Schmid &amp; Amalie Nilsen</div>
-            </div>
-          </div>
-        </div>
+        <div class="entries" id="wp-list-no"></div>
 
         <h3 class="subhead">Utvalgte presentasjoner og konferanser</h3>
-        <div class="entries">
-          <div class="entry">
-            <div class="when">Nov 2024</div>
-            <div>
-              <div class="title">Sensitivity Analysis of Determinants of Conflict Onset</div>
-              <div class="meta">Invitert foredrag — PaCE: Patterns of Conflict Emergence</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">Jul 2024</div>
-            <div>
-              <div class="title">When the Target Becomes the Message</div>
-              <div class="meta">European Political Science Association Annual Conference, Köln</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">Jul 2024</div>
-            <div>
-              <div class="title">When the Target Becomes the Message</div>
-              <div class="meta">The Jan Tinbergen European Peace Science Conference, Dublin</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">Jul 2023</div>
-            <div>
-              <div class="title">Cabinet Composition and Interstate War</div>
-              <div class="meta">European Political Science Association Annual Conference, Glasgow</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">Nov 2025</div>
-            <div>
-              <div class="title">Moral Norms and Interstate War</div>
-              <div class="meta">Dansk Selskab for Statskunskab, Nyborg</div>
-            </div>
-          </div>
-        </div>
+        <div class="entries" id="talks-list-no"></div>
         <p class="note">13 konferanse- og workshopbidrag siden 2022 – full liste tilgjengelig på forespørsel.</p>
       </div>
     </section>
@@ -686,30 +136,16 @@
         <div class="grid-2">
           <div>
             <h3 class="subhead">Lecturer</h3>
-            <ul class="plain">
-              <li>Research Design and Quantitative Methods (STV1020)<span class="tag">University of Oslo</span></li>
-              <li>Causes of War in International Politics<span class="tag">Graduate level, University of Oslo</span></li>
-              <li>Komparativ Politikk (STAT1210)<span class="tag">Oslo New University College</span></li>
-            </ul>
+            <ul class="plain" id="lecturer-list-en"></ul>
           </div>
           <div>
             <h3 class="subhead">Seminar instructor</h3>
-            <ul class="plain">
-              <li>Research Design &amp; Quantitative Methods<span class="tag">BA level</span></li>
-              <li>Research Design &amp; Qualitative Methods<span class="tag">BA level</span></li>
-              <li>Research Design &amp; Statistics<span class="tag">MA level</span></li>
-              <li>Quantitative Text Analysis<span class="tag">2023–2024</span></li>
-              <li>Autocratic Politics<span class="tag">2023</span></li>
-            </ul>
+            <ul class="plain" id="seminar-list-en"></ul>
           </div>
         </div>
 
         <h3 class="subhead">MA thesis supervision</h3>
-        <ul class="plain" style="margin-top: 0.5rem;">
-          <li>Jared Nickodem — <em>Yankee Go Home: National Narratives, Memory Politics, and Public Opinion in post-2014 Serbia</em><span class="tag">co-supervised with Sverke R. Saxegaard, 2023–2024</span></li>
-          <li>Malin Øyan Kamfjord — <em>Sektorer i Søkelyset: En kvantitativ undersøkelse av økonomisk vekst gjennom målrettet bistandsallokering</em><span class="tag">co-supervised with Karin Dokken, 2023–2024</span></li>
-          <li>Bror Grev Møgster — <em>Media Influence on US Government Weapon Delivery to Ukraine</em><span class="tag">2023–2024</span></li>
-        </ul>
+        <ul class="plain" id="supervision-list-en" style="margin-top: 0.5rem;"></ul>
 
         <p class="note">Examiner for BA and MA theses in Political Science since 2022 · Peer reviewer for the Journal of Peace Research and Political Psychology.</p>
       </div>
@@ -722,30 +158,16 @@
         <div class="grid-2">
           <div>
             <h3 class="subhead">Foreleser</h3>
-            <ul class="plain">
-              <li>Forskningsdesign og kvantitativ metode (STV1020)<span class="tag">Universitetet i Oslo</span></li>
-              <li>Causes of War in International Politics<span class="tag">Masternivå, Universitetet i Oslo</span></li>
-              <li>Komparativ politikk (STAT1210)<span class="tag">Oslo Nye Høyskole</span></li>
-            </ul>
+            <ul class="plain" id="lecturer-list-no"></ul>
           </div>
           <div>
             <h3 class="subhead">Seminarleder</h3>
-            <ul class="plain">
-              <li>Forskningsdesign og kvantitativ metode<span class="tag">Bachelornivå</span></li>
-              <li>Forskningsdesign og kvalitativ metode<span class="tag">Bachelornivå</span></li>
-              <li>Forskningsdesign og statistikk<span class="tag">Masternivå</span></li>
-              <li>Kvantitativ tekstanalyse<span class="tag">2023–2024</span></li>
-              <li>Autokratisk politikk<span class="tag">2023</span></li>
-            </ul>
+            <ul class="plain" id="seminar-list-no"></ul>
           </div>
         </div>
 
         <h3 class="subhead">Veiledning av masteroppgaver</h3>
-        <ul class="plain" style="margin-top: 0.5rem;">
-          <li>Jared Nickodem — <em>Yankee Go Home: National Narratives, Memory Politics, and Public Opinion in post-2014 Serbia</em><span class="tag">samveiledet med Sverke R. Saxegaard, 2023–2024</span></li>
-          <li>Malin Øyan Kamfjord — <em>Sektorer i Søkelyset: En kvantitativ undersøkelse av økonomisk vekst gjennom målrettet bistandsallokering</em><span class="tag">samveiledet med Karin Dokken, 2023–2024</span></li>
-          <li>Bror Grev Møgster — <em>Media Influence on US Government Weapon Delivery to Ukraine</em><span class="tag">2023–2024</span></li>
-        </ul>
+        <ul class="plain" id="supervision-list-no" style="margin-top: 0.5rem;"></ul>
 
         <p class="note">Sensor for bachelor- og masteroppgaver i statsvitenskap siden 2022 · Fagfellevurderer for Journal of Peace Research og Political Psychology.</p>
       </div>
@@ -757,35 +179,10 @@
         <h2>The same rigor, pointed at a business question</h2>
         <p>Before and alongside the PhD, I worked as a data scientist — the same toolkit that underpins my academic research: building statistical models on large, often messy datasets, and translating the results for people who don't need to see the model.</p>
 
-        <div class="entries">
-          <div class="entry">
-            <div class="when">2020–<br>2021</div>
-            <div>
-              <div class="title">Data Scientist, Ipsos</div>
-              <div class="meta">Analyzed survey and market research data to support client decisions; structured and processed large datasets and built statistical analyses tailored to specific commercial questions; translated technical findings for non-technical stakeholders.</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">2020–<br>2022</div>
-            <div>
-              <div class="title">Research Assistant, University of Oslo</div>
-              <div class="meta">Data collection, quality assurance, and analysis for active research projects; contributed to method development, coding, and documentation.</div>
-            </div>
-          </div>
-        </div>
+        <div class="entries" id="experience-list-en"></div>
 
         <h3 class="subhead">Toolkit</h3>
-        <div class="tools">
-          <span class="tool primary">R — advanced</span>
-          <span class="tool">Python</span>
-          <span class="tool">JavaScript</span>
-          <span class="tool">Qualtrics</span>
-          <span class="tool">Causal inference</span>
-          <span class="tool">Experimental design</span>
-          <span class="tool">Quantitative text analysis</span>
-          <span class="tool">Statistical modeling</span>
-          <span class="tool">Data visualization</span>
-        </div>
+        <div class="tools" id="tools-list-en"></div>
       </div>
 
       <div class="t-no">
@@ -793,35 +190,10 @@
         <h2>Samme grundighet, rettet mot et forretningsspørsmål</h2>
         <p>Før og parallelt med doktorgraden jobbet jeg som dataanalytiker – med det samme verktøysettet som ligger til grunn for forskningen min: å bygge statistiske modeller på store, ofte rotete datasett, og oversette resultatene for folk som ikke trenger å se modellen.</p>
 
-        <div class="entries">
-          <div class="entry">
-            <div class="when">2020–<br>2021</div>
-            <div>
-              <div class="title">Dataanalytiker, Ipsos</div>
-              <div class="meta">Analyserte undersøkelses- og markedsdata for å støtte kundenes beslutninger; strukturerte og bearbeidet store datasett og utviklet statistiske analyser tilpasset konkrete kommersielle problemstillinger; oversatte tekniske funn for ikke-tekniske interessenter.</div>
-            </div>
-          </div>
-          <div class="entry">
-            <div class="when">2020–<br>2022</div>
-            <div>
-              <div class="title">Forskningsassistent, Universitetet i Oslo</div>
-              <div class="meta">Innsamling, kvalitetssikring og analyse av data til aktive forskningsprosjekter; bidro til metodeutvikling, koding og dokumentasjon.</div>
-            </div>
-          </div>
-        </div>
+        <div class="entries" id="experience-list-no"></div>
 
         <h3 class="subhead">Verktøy</h3>
-        <div class="tools">
-          <span class="tool primary">R — avansert</span>
-          <span class="tool">Python</span>
-          <span class="tool">JavaScript</span>
-          <span class="tool">Qualtrics</span>
-          <span class="tool">Kausal inferens</span>
-          <span class="tool">Eksperimentdesign</span>
-          <span class="tool">Kvantitativ tekstanalyse</span>
-          <span class="tool">Statistisk modellering</span>
-          <span class="tool">Datavisualisering</span>
-        </div>
+        <div class="tools" id="tools-list-no"></div>
       </div>
     </section>
 
@@ -862,44 +234,7 @@
   </main>
 </div>
 
-<script>
-  (function () {
-    var shell = document.querySelector('.shell');
-    var buttons = document.querySelectorAll('.lang-btn');
-
-    function setLang(lang) {
-      shell.setAttribute('data-lang', lang);
-      shell.setAttribute('lang', lang === 'no' ? 'nb' : 'en');
-      buttons.forEach(function (b) {
-        b.setAttribute('aria-pressed', b.getAttribute('data-set-lang') === lang ? 'true' : 'false');
-      });
-      try { localStorage.setItem('site-lang', lang); } catch (e) {}
-    }
-
-    buttons.forEach(function (b) {
-      b.addEventListener('click', function () { setLang(b.getAttribute('data-set-lang')); });
-    });
-
-    var saved = null;
-    try { saved = localStorage.getItem('site-lang'); } catch (e) {}
-    setLang(saved === 'en' ? 'en' : 'no');
-  })();
-
-  (function () {
-    var sidebar = document.getElementById('sidebar');
-    var menuBtn = document.querySelector('.menu-toggle');
-
-    function setMenu(open) {
-      sidebar.setAttribute('data-menu', open ? 'open' : 'closed');
-      menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    }
-
-    menuBtn.addEventListener('click', function () {
-      setMenu(sidebar.getAttribute('data-menu') !== 'open');
-    });
-
-    document.querySelectorAll('.sidenav a').forEach(function (a) {
-      a.addEventListener('click', function () { setMenu(false); });
-    });
-  })();
-</script>
+<script src="content/research.js"></script>
+<script src="content/teaching.js"></script>
+<script src="content/data-analytics.js"></script>
+<script src="assets/script.js"></script>
